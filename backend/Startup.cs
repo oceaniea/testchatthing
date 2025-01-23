@@ -34,7 +34,7 @@ namespace LiveChat
                     policy.AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials()
-                          .WithOrigins(Configuration["FrontendUrl"])));
+                          .WithOrigins(Configuration.GetSection("FrontendUrls").Get<string[]>())));
 
             services.AddControllers();
         }
