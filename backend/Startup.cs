@@ -24,20 +24,29 @@ namespace LiveChat
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
+{
+    services.AddSignalR();
+
+    services.AddHealthChecks();
+
+    // CORS configuration
+    services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
         {
-            services.AddSignalR();
+            policy.AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials()
+                  .WithOrigins(
+                      "https://testchatthing-5o5a.vercel.app",  // Frontend hosted on Vercel
+                      "https://testchatthing.onrender.com"      // Backend hosted on Render
+                  );
+        });
+    });
 
-            services.AddHealthChecks();
+    services.AddControllers();
+}
 
-            services.AddCors(options =>
-                options.AddDefaultPolicy(policy =>
-                    policy.AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials()
-                          .WithOrigins(Configuration.GetSection("FrontendUrls").Get<string[]>())));
-
-            services.AddControllers();
-        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
