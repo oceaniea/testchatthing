@@ -15,4 +15,4 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 
 # Run the app on container startup
-CMD ASPNETCORE_URLS=http://*:$PORT dotnet LiveChat.dll
+CMD ASPNETCORE_URLS=http://*:$PORT DOTNET_RUNNING_IN_CONTAINER=true dotnet LiveChat.dll
